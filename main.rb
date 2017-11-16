@@ -84,14 +84,69 @@ class Hero
   end
 end
 
-hero = Hero.new("Hero",300,30)
+class HolyKnight < Hero
+  def attack(enemy)
+      # 1.計算攻擊的傷害
+      damang = rand(@ap..@ap*2)
+      # 2.減少敵人的HP
+      enemy.hp = enemy.hp - damang
+      
+      puts "#{@name}發出聖光！"
+      puts "#{enemy.name} 受到 #{damang} 點傷害"
+      puts "#{enemy.name} 剩下 #{enemy.hp} 點HP"
+      puts "--------------------"
+      
+      # 3.檢查被攻擊的敵人是否戰死
+      if  enemy.hp < 1
+        enemy.die
+      end
+  end
+end
 
-monster = Monster.new("Bone",1000,30)
-monster.name # 有設定 attr_accessor才能直接存取 name
+class Mage < Hero
+  def initialize(name,hp,ap,mp)
+    super(name,hp,ap)
+    # 新增一個attribute:mp 魔法力
+    @mp = mp
+  end
+    
+    def attack(enemy)
+      if @mp >= 3
+        damang=fireball
+        puts "#{@name}發出火球！"
+        puts "#{enemy.name} 受到 #{damang} 點傷害"
+        puts "#{enemy.name} 剩下 #{enemy.hp} 點HP"
+        puts "--------------------"
+        # 1.計算攻擊的傷害
+        damang = rand(@ap..@ap*2)
+        # 2.減少敵人的HP
+        enemy.hp = enemy.hp - damang
+        # 3.檢查被攻擊的敵人是否戰死
+        if  enemy.hp < 1
+          enemy.die
+        end
+      elsif @mp < 3
+        super(enemy)
+      end
+    end
+
+    def fireball
+      @mp -= 3
+      return rand(@ap/2..@ap)+50
+    end
+end
+
+hero = Hero.new('Hero',300,30)
+holy_knight = HolyKnight.new('HolyKnight',300,30)
+mage = Mage.new('Mage',100,20,50)
+
+monster = Monster.new('Bone',1000,30)
 
 while hero.is_alive? && monster.is_alive?
 
   hero.attack(monster)
+  holy_knight.attack(monster)
+  mage.attack(monster)
   if !(monster.is_alive?) 
     break
   end
