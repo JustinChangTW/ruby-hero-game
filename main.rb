@@ -43,6 +43,8 @@ end
 
 class Hero
   attr_accessor :name,:hp,:ap # 生成能存取該 attribute 的 method
+
+  @@heroes=[] # class variables 
   # 在這裡寫入您的Monster的attributes和methods
   def initialize(name,hp,ap)
       @name = name # 要使用實例變數（Instance Variable）(@)，才可以在整個物件中使用，不然只能在method內使用
@@ -50,10 +52,22 @@ class Hero
       @ap = ap
       @alive = true
       
+      @@heroes << self # self：object本身（this)，<<:放入陣列尾端
+
       puts "勇者 #{@name}了！"
       puts "生命力（HP）：#{@hp}"
       puts "攻擊力（AP）：#{@ap}"
       puts "--------------------"
+  end
+
+  # 回傳英雄們的數量
+  def self.count
+    return @@heroes.length
+  end
+
+  # 回傳英雄們的陣列
+  def self.all
+    return @@heroes
   end
 
   def is_alive?
@@ -139,6 +153,13 @@ end
 hero = Hero.new('Hero',300,30)
 holy_knight = HolyKnight.new('HolyKnight',300,30)
 mage = Mage.new('Mage',100,20,50)
+
+team = Hero.all
+
+puts "You have #{Hero.count} heros in your team:"
+team.each do |hero|
+  puts "#{hero.name} - Class:#{hero.class}, HP:#{hero.hp}"
+end
 
 monster = Monster.new('Bone',1000,30)
 
